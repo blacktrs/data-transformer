@@ -1,0 +1,32 @@
+{
+    "name": "blacktrs/data-transformer",
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "doctrine/collections": "^1.7"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.1",
+        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^1.8",
+        "vimeo/psalm": "^4.26"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Blacktrs\\DataTransformer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Blacktrs\\DataTransformer\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tarchr",
+            "email": "taras.chr@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
