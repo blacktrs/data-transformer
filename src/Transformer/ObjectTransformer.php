@@ -1,32 +1,39 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Item;
+declare(strict_types=1);
 
-use Blacktrs\DataTransformer\Attribute\Field;
-use Blacktrs\DataTransformer\Value\ValueTransformerInterface;
+namespace Blacktrs\DataTransformer\Transformer;
+
+use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\{Fieldable, ValueResolverInterface};
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionProperty;
-use ReflectionType;
 use ReflectionUnionType;
 
-class ItemTransformer implements ItemTransformerInterface
+class ObjectTransformer implements ObjectTransformerInterface
 {
+    use Fieldable;
+
+    /**
+     * @var array<array-key, mixed>
+     */
+    private array $data;
+
     private object $object;
 
     /**
-     * {@inheritDoc}
+     * @param class-string $objectClass
+     * @param array<array-key, mixed> $data
      */
-    public function __construct(string $objectClass, private readonly array $data)
+    public function transform(string $objectClass, iterable $data): object
     {
+        $this->data = $data;
         $this->object = new $objectClass();
 
         $this->handleItem();
-    }
 
-    public function value(): object
-    {
         return $this->object;
     }
 
@@ -39,13 +46,13 @@ class ItemTransformer implements ItemTransformerInterface
         foreach ($properties as $property) {
             $field = $this->getFieldAttribute($property);
 
-            if ($field->ignore) {
+            if (!$this->isPropertyWritable($property, $field)) {
                 continue;
             }
 
-            $name = $field->name ?? $property->getName();
+            $name = $field->nameIn ?? $property->getName();
 
-            if (\array_key_exists($name, $this->data) && !$property->isInitialized($this->object)) {
+            if (\array_key_exists($name, $this->data)) {
                 $property->setAccessible(true);
                 $value = $this->getValue($field, $property, $name);
 
@@ -54,56 +61,70 @@ class ItemTransformer implements ItemTransformerInterface
         }
     }
 
-    private function getFieldAttribute(ReflectionProperty $property): Field
+    private function isPropertyWritable(ReflectionProperty $property, TransformerField $field): bool
     {
-        $attribute = $property->getAttributes(Field::class)[0] ?? null;
-
-        if (!$attribute) {
-            return new Field();
+        if ($property->isReadOnly()) {
+            return !$field->ignoreTransform && !$property->isInitialized($this->object);
         }
 
-        return $attribute->newInstance();
+        return !$field->ignoreTransform;
     }
 
-    private function getValue(Field $field, ReflectionProperty $property, string $name): mixed
+    private function getValue(TransformerField $field, ReflectionProperty $property, string $name): mixed
     {
+        /** @var ReflectionNamedType|ReflectionIntersectionType|ReflectionUnionType $reflectionType */
         $reflectionType = $property->getType();
 
-        if ($field->valueTransformer !== null && is_subclass_of($field->valueTransformer, ValueTransformerInterface::class)) {
-            /** @var ValueTransformerInterface $valueTransformer */
-            $valueTransformer = new $field->valueTransformer($this->data[$name]);
+        if (
+            $field->valueResolver !== null
+            && is_subclass_of($field->valueResolver, ValueResolverInterface::class)
+        ) {
+            /** @var ValueResolverInterface $valueTransformer */
+            $valueTransformer = \is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
-            return $valueTransformer->value();
+            return $valueTransformer->transform($this->data[$name]);
         }
 
         if (
-            $field->itemTransformer !== null
-            && is_subclass_of($field->itemTransformer, ItemTransformerInterface::class)
+            $field->objectTransformer !== null
+            && is_subclass_of($field->objectTransformer, ObjectTransformerInterface::class)
             && $property->hasType()
         ) {
-            /** @var ItemTransformer $itemTransformer */
-            $itemTransformer = new $field->itemTransformer($this->getType($reflectionType), $this->data[$name]);
+            /** @var ObjectTransformerInterface $objectTransformer */
+            $objectTransformer = \is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
 
-            return $itemTransformer->value();
+            /** @var class-string $objectClass */
+            $objectClass = $this->getType($reflectionType);
+
+            return $objectTransformer->transform($objectClass, $this->data[$name]);
         }
 
         $value = $this->data[$name];
 
-        if ($property->hasType() && $reflectionType->isBuiltin()) {
-            $type = $this->getType($reflectionType);
+        if ($property->hasType() && $reflectionType instanceof ReflectionNamedType) {
+            if ($reflectionType->isBuiltin()) {
+                settype($value, $reflectionType->getName());
 
-            settype($value, $type);
+                return $value;
+            }
+
+            if (class_exists($reflectionType->getName())) {
+                return (new self())->transform($reflectionType->getName(), $value);
+            }
         }
 
         return $value;
     }
 
-    private function getType(?ReflectionType $reflectionType): string
+    /**
+     * @return class-string|string
+     */
+    private function getType(ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type): string
     {
+        /** @psalm-suppress UndefinedMethod */
         return match (true) {
-            $reflectionType instanceof ReflectionNamedType => $reflectionType->getName(),
-            $reflectionType instanceof ReflectionUnionType,
-            $reflectionType instanceof ReflectionIntersectionType => $reflectionType->getTypes()[0]->getName()
+            $type instanceof ReflectionNamedType => $type->getName(),
+            $type instanceof ReflectionUnionType, $type instanceof ReflectionIntersectionType => $type->getTypes()[0]->getName()
         };
     }
 }

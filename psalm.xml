@@ -8,9 +8,15 @@
 >
     <projectFiles>
         <directory name="src"/>
-        <directory name="tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
+    <issueHandlers>
+        <MoreSpecificImplementedParamType>
+            <errorLevel type="suppress">
+                <directory name="src" />
+            </errorLevel>
+        </MoreSpecificImplementedParamType>
+    </issueHandlers>
 </psalm>

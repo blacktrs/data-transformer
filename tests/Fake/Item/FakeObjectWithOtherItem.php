@@ -1,14 +1,17 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Tests\Fake\Item\Transform;
+declare(strict_types=1);
 
-use Blacktrs\DataTransformer\Attribute\Field;
+namespace Blacktrs\DataTransformer\Tests\Fake\Item;
+
+use Blacktrs\DataTransformer\Attribute\TransformerField;
 use Blacktrs\DataTransformer\Transformer\ObjectTransformer;
 
 class FakeObjectWithOtherItem
 {
+    #[TransformerField]
     public string $objectId;
 
-    #[Field(nameIn: 'fake_simple_object', objectTransformer: ObjectTransformer::class)]
+    #[TransformerField(nameIn: 'fake_simple_object', objectTransformer: new ObjectTransformer())]
     public FakeSimpleObject $simpleObject;
 }

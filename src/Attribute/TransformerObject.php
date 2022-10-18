@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Blacktrs\DataTransformer\Attribute;
 
+use Attribute;
 use Blacktrs\DataTransformer\Serializer\ObjectSerializerInterface;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
-class TransformerItem
+#[Attribute(Attribute::TARGET_CLASS)]
+class TransformerObject
 {
     public function __construct(
         /**

@@ -1,17 +1,18 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Tests\Fake\Item\Transform;
+declare(strict_types=1);
 
-use Blacktrs\DataTransformer\Attribute\Field;
+namespace Blacktrs\DataTransformer\Tests\Fake\Item;
+
+use Blacktrs\DataTransformer\Attribute\TransformerField;
 
 class FakeSimpleObject
 {
-    public readonly int $id;
+    public int $id;
+    public string $label;
 
-    public readonly string $label;
-
-    #[Field(ignoreTransform: true)]
-    public readonly string $description;
+    #[TransformerField(ignoreTransform: true)]
+    public string $description;
 
     public function __construct()
     {

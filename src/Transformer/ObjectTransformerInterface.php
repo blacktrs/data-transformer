@@ -1,14 +1,14 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Item;
+declare(strict_types=1);
 
-interface ItemTransformerInterface
+namespace Blacktrs\DataTransformer\Transformer;
+
+interface ObjectTransformerInterface
 {
     /**
      * @param class-string $objectClass
-     * @param array<array-key, mixed> $data
+     * @param array<array<array-key, mixed>>|array<array-key, mixed> $data
      */
-    public function __construct(string $objectClass, array $data);
-
-    public function value(): mixed;
+    public function transform(string $objectClass, iterable $data): mixed;
 }

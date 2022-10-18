@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Blacktrs\DataTransformer\Tests\Transformer;
 
 use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldNameDeclaration,
-    FakeObjectWithFieldTransformer,
+    FakeObjectWithFieldResolver,
     FakeObjectWithOtherItem,
     FakeObjectWithPrivateProperties,
     FakeSimpleObject};
 use Blacktrs\DataTransformer\Transformer\ObjectTransformer;
 use PHPUnit\Framework\TestCase;
 
-class ItemTransformerTest extends TestCase
+class ObjectTransformerTest extends TestCase
 {
     private ObjectTransformer $transformer;
 
@@ -23,7 +25,6 @@ class ItemTransformerTest extends TestCase
     {
         $data = ['id' => 2, 'label' => 'Test Label', 'description' => 'some text'];
 
-
         /** @var FakeSimpleObject $fakeObject */
         $fakeObject = $this->transformer->transform(FakeSimpleObject::class, $data);
 
@@ -32,22 +33,22 @@ class ItemTransformerTest extends TestCase
         self::assertNotSame($data['description'], $fakeObject->description);
     }
 
-    public function testCamelCaseTransformation(): void
+    public function testCustomFieldNameDeclaration(): void
     {
-        $data = ['camel_cased_name' => 'camel cased property'];
+        $data = ['origin_name' => 'camel cased property'];
 
         /** @var FakeObjectWithFieldNameDeclaration $fakeObject */
         $fakeObject = $this->transformer->transform(FakeObjectWithFieldNameDeclaration::class, $data);
 
-        self::assertSame($data['camel_cased_name'], $fakeObject->camelCasedName);
+        self::assertSame($data['origin_name'], $fakeObject->customName);
     }
 
     public function testFieldTransformation(): void
     {
         $data = ['dateTime' => '2022-08-30'];
 
-        /** @var FakeObjectWithFieldTransformer $fakeObject */
-        $fakeObject = $this->transformer->transform(FakeObjectWithFieldTransformer::class, $data);
+        /** @var FakeObjectWithFieldResolver $fakeObject */
+        $fakeObject = $this->transformer->transform(FakeObjectWithFieldResolver::class, $data);
 
         $dateTime = new \DateTime($data['dateTime']);
         self::assertSame($dateTime->format('Y-m-d'), $fakeObject->dateTime->format('Y-m-d'));
@@ -72,6 +73,16 @@ class ItemTransformerTest extends TestCase
         $fakeObject = $this->transformer->transform(FakeObjectWithPrivateProperties::class, $data);
 
         self::assertSame($data['name'], $fakeObject->getName());
-        self::assertSame($data['age'], $fakeObject->getAge());
+        self::assertNotSame($data['age'], $fakeObject->getAge());
+    }
+
+    public function testCustomPropertyResolver(): void
+    {
+         $data = ['name' => 'John Doe', 'age' => 42];
+
+        /** @var FakeObjectWithPrivateProperties $fakeObject */
+        $fakeObject = $this->transformer->transform(FakeObjectWithPrivateProperties::class, $data);
+
+        self::assertNotSame($fakeObject->getAge(), $data['age']);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Blacktrs\DataTransformer\Serializer;
 
-interface ItemSerializerInterface
+interface ObjectSerializerInterface
 {
-    public function __construct(object $item);
-
-    public function value(): mixed;
+    public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): mixed;
 }

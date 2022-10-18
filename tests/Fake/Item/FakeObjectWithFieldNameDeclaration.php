@@ -1,11 +1,13 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Tests\Fake\Item\Transform;
+declare(strict_types=1);
 
-use Blacktrs\DataTransformer\Attribute\Field;
+namespace Blacktrs\DataTransformer\Tests\Fake\Item;
+
+use Blacktrs\DataTransformer\Attribute\TransformerField;
 
 class FakeObjectWithFieldNameDeclaration
 {
-    #[Field(nameIn: 'camel_cased_name')]
-    public readonly string $camelCasedName;
+    #[TransformerField(nameIn: 'origin_name')]
+    public readonly string $customName;
 }

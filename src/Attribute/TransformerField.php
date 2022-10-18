@@ -1,34 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Blacktrs\DataTransformer\Attribute;
 
 use Attribute;
-use Blacktrs\DataTransformer\Serializer\FieldSerializerInterface;
-use Blacktrs\DataTransformer\Transformer\{ObjectTransformerInterface, ValueTransformerInterface};
+use Blacktrs\DataTransformer\Transformer\{ObjectTransformerInterface};
+use Blacktrs\DataTransformer\ValueResolverInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Field
+class TransformerField
 {
     public function __construct(
         public readonly ?string $nameIn = null,
         public readonly ?string $nameOut = null,
 
         /**
-         * @var ValueTransformerInterface|class-string<ValueTransformerInterface>|null $valueTransformer
+         * @var ValueResolverInterface|class-string<ValueResolverInterface>|null $valueTransformer
          */
-        public readonly ValueTransformerInterface|string|null $valueTransformer = null,
+        public readonly ValueResolverInterface|string|null $valueResolver = null,
 
         /**
          * @var ObjectTransformerInterface|class-string<ObjectTransformerInterface>|null $objectTransformer
          */
         public readonly ObjectTransformerInterface|string|null $objectTransformer = null,
         public readonly bool $ignoreTransform = false,
-        public readonly bool $ignoreSerialize = false,
-
-        /**
-         * @var FieldSerializerInterface|class-string<FieldSerializerInterface>|null $objectTransformer
-         */
-        public readonly FieldSerializerInterface|string|null $serializer = null
+        public readonly bool $ignoreSerialize = false
     ) {
     }
 }

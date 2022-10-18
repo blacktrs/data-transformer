@@ -1,11 +1,17 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Tests\Fake\Item\Transform;
+declare(strict_types=1);
+
+namespace Blacktrs\DataTransformer\Tests\Fake\Item;
+
+use Blacktrs\DataTransformer\Attribute\TransformerField;
 
 class FakeObjectWithPrivateProperties
 {
+    #[TransformerField]
     private string $name;
-    private int $age;
+
+    private int $age = 0;
 
     public function getName(): string
     {

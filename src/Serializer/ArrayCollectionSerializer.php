@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Blacktrs\DataTransformer\Serializer;
 
 class ArrayCollectionSerializer
 {
-    public function serialize(iterable $objects): iterable
+    /**
+     * @param iterable<object> $objects
+     * @return array<array<array-key, mixed>>
+     */
+    public function serialize(iterable $objects): array
     {
         $serializer = new ArrayObjectSerializer();
         $collection = [];

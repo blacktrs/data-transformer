@@ -1,6 +1,8 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Transformer;
+declare(strict_types=1);
+
+namespace Blacktrs\DataTransformer;
 
 interface ValueResolverInterface
 {

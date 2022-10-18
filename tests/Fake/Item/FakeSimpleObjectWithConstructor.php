@@ -1,11 +1,17 @@
 <?php
 
-namespace Blacktrs\DataTransformer\Tests\Fake\Item\Serialize;
+declare(strict_types=1);
 
-class FakeSimpleObject
+namespace Blacktrs\DataTransformer\Tests\Fake\Item;
+
+use Blacktrs\DataTransformer\Attribute\TransformerField;
+
+class FakeSimpleObjectWithConstructor
 {
     public function __construct(
+        #[TransformerField]
         public readonly int $id,
+        #[TransformerField]
         public readonly string $label,
     ) {
     }

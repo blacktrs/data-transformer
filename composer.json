@@ -9,7 +9,8 @@
         "symfony/var-dumper": "^6.1",
         "phpunit/phpunit": "^9.5",
         "phpstan/phpstan": "^1.8",
-        "vimeo/psalm": "^4.26"
+        "vimeo/psalm": "^4.26",
+        "friendsofphp/php-cs-fixer": "^3.10"
     },
     "license": "MIT",
     "autoload": {
@@ -28,5 +29,13 @@
             "email": "taras.chr@gmail.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "dev",
+    "scripts": {
+        "test": [
+            "php-cs-fixer fix --dry-run",
+            "phpunit",
+            "phpstan",
+            "psalm"
+        ]
+    }
 }
