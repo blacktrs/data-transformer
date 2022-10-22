@@ -2,8 +2,7 @@
     "name": "blacktrs/data-transformer",
     "type": "library",
     "require": {
-        "php": ">=8.1",
-        "doctrine/collections": "^1.7"
+        "php": ">=8.1"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.1",
