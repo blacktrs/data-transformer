@@ -7,6 +7,11 @@ namespace Blacktrs\DataTransformer\Serializer;
 use Blacktrs\DataTransformer\Attribute\TransformerField;
 use Blacktrs\DataTransformer\{Fieldable, ValueResolverInterface};
 use ReflectionProperty;
+use ReflectionClass;
+
+use function is_string;
+use function is_object;
+use function is_callable;
 
 class ArrayObjectSerializer implements ObjectSerializerInterface
 {
@@ -18,7 +23,7 @@ class ArrayObjectSerializer implements ObjectSerializerInterface
      */
     public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): array
     {
-        $reflection = new \ReflectionClass($object);
+        $reflection = new ReflectionClass($object);
         $properties = $reflection->getProperties();
 
         $serialized = [];
@@ -45,7 +50,7 @@ class ArrayObjectSerializer implements ObjectSerializerInterface
             return null;
         }
 
-        return \is_string($serializer) ? new $serializer() : $serializer;
+        return is_string($serializer) ? new $serializer() : $serializer;
     }
 
     private function getFieldValue(
@@ -57,14 +62,14 @@ class ArrayObjectSerializer implements ObjectSerializerInterface
         $value = $this->getValueFromMethods($object, $property);
 
         if ($field->valueResolver !== null && is_subclass_of($field->valueResolver, ValueResolverInterface::class)) {
-            $serializer = \is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
+            $serializer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
-            return  $serializer->serialize($value);
+            return $serializer->serialize($value);
         }
 
-        if (\is_object($value)) {
+        if (is_object($value)) {
             if ($originSerializer) {
-                return  $originSerializer->serialize($value);
+                return $originSerializer->serialize($value);
             }
 
             return $this->serialize($value);
@@ -75,13 +80,14 @@ class ArrayObjectSerializer implements ObjectSerializerInterface
 
     private function getValueFromMethods(object $object, ReflectionProperty $property): mixed
     {
-        if (\is_callable([$object, $property->getName()])) {
+        if (is_callable([$object, $property->getName()])) {
             $methodName = $property->getName();
             return $object->$methodName();
         }
 
-        if (\is_callable([$object, 'get' . ucfirst($property->getName())])) {
-            $methodName = 'get' . ucfirst($property->getName());
+        $getterMethodName = 'get' . ucfirst($property->getName());
+        if (is_callable([$object, $getterMethodName])) {
+            $methodName = 'get' . $getterMethodName();
             return $object->$methodName();
         }
 

@@ -9,6 +9,7 @@ use Blacktrs\DataTransformer\Attribute\TransformerField;
 class FakeSimpleObject
 {
     public int $id;
+
     public string $label;
 
     #[TransformerField(ignoreTransform: true)]

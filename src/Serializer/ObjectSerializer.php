@@ -7,12 +7,13 @@ namespace Blacktrs\DataTransformer\Serializer;
 use Blacktrs\DataTransformer\Attribute\TransformerObject;
 use ReflectionClass;
 
+use function is_string;
+
 class ObjectSerializer implements ObjectSerializerInterface
 {
     public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): mixed
     {
         $reflection = new ReflectionClass($object);
-
         $objectItem = $this->getTransformerObject($reflection);
 
         return $this->getObjectSerializer($objectItem)->serialize($object, $this);
@@ -24,7 +25,7 @@ class ObjectSerializer implements ObjectSerializerInterface
             return new ArrayObjectSerializer();
         }
 
-        return \is_string($objectItem->serializer) ? new $objectItem->serializer() : $objectItem->serializer;
+        return is_string($objectItem->serializer) ? new $objectItem->serializer() : $objectItem->serializer;
     }
 
     /**

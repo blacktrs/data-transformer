@@ -12,6 +12,9 @@ use ReflectionNamedType;
 use ReflectionProperty;
 use ReflectionUnionType;
 
+use function array_key_exists;
+use function is_string;
+
 class ObjectTransformer implements ObjectTransformerInterface
 {
     use Fieldable;
@@ -52,7 +55,7 @@ class ObjectTransformer implements ObjectTransformerInterface
 
             $name = $field->nameIn ?? $property->getName();
 
-            if (\array_key_exists($name, $this->data)) {
+            if (array_key_exists($name, $this->data)) {
                 $property->setAccessible(true);
                 $value = $this->getValue($field, $property, $name);
 
@@ -80,7 +83,7 @@ class ObjectTransformer implements ObjectTransformerInterface
             && is_subclass_of($field->valueResolver, ValueResolverInterface::class)
         ) {
             /** @var ValueResolverInterface $valueTransformer */
-            $valueTransformer = \is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
+            $valueTransformer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
             return $valueTransformer->transform($this->data[$name]);
         }
@@ -91,7 +94,7 @@ class ObjectTransformer implements ObjectTransformerInterface
             && $property->hasType()
         ) {
             /** @var ObjectTransformerInterface $objectTransformer */
-            $objectTransformer = \is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
+            $objectTransformer = is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
 
             /** @var class-string $objectClass */
             $objectClass = $this->getType($reflectionType);

@@ -11,6 +11,7 @@ use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldNameDeclaration
     FakeSimpleObject};
 use Blacktrs\DataTransformer\Transformer\ObjectTransformer;
 use PHPUnit\Framework\TestCase;
+use DateTime;
 
 class ObjectTransformerTest extends TestCase
 {
@@ -50,7 +51,7 @@ class ObjectTransformerTest extends TestCase
         /** @var FakeObjectWithFieldResolver $fakeObject */
         $fakeObject = $this->transformer->transform(FakeObjectWithFieldResolver::class, $data);
 
-        $dateTime = new \DateTime($data['dateTime']);
+        $dateTime = new DateTime($data['dateTime']);
         self::assertSame($dateTime->format('Y-m-d'), $fakeObject->dateTime->format('Y-m-d'));
     }
 
@@ -78,7 +79,7 @@ class ObjectTransformerTest extends TestCase
 
     public function testCustomPropertyResolver(): void
     {
-         $data = ['name' => 'John Doe', 'age' => 42];
+        $data = ['name' => 'John Doe', 'age' => 42];
 
         /** @var FakeObjectWithPrivateProperties $fakeObject */
         $fakeObject = $this->transformer->transform(FakeObjectWithPrivateProperties::class, $data);

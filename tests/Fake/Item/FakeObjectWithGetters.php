@@ -11,10 +11,8 @@ class FakeObjectWithGetters
     public function __construct(
         #[TransformerField]
         private readonly string $name,
-
         #[TransformerField]
         public readonly int $age,
-
         #[TransformerField]
         private readonly bool $isHuman
     ) {

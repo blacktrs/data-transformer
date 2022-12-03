@@ -23,6 +23,10 @@ return (new Config())
             'group_import' => true,
             'single_import_per_statement' => false,
             'declare_strict_types' => true,
+            'global_namespace_import' => [
+                'import_functions' => true,
+                'import_classes' => true,
+            ],
         ]
     )
     ->setFinder($finder);

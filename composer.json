@@ -24,7 +24,7 @@
     },
     "authors": [
         {
-            "name": "tarchr",
+            "name": "Taras Chornyi",
             "email": "taras.chr@gmail.com"
         }
     ],
@@ -36,5 +36,10 @@
             "phpstan",
             "psalm"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     }
 }

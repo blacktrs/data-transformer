@@ -11,6 +11,7 @@ use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldResolver,
     FakeSimpleObject,
     FakeSimpleObjectWithConstructor};
 use PHPUnit\Framework\TestCase;
+use DateTime;
 
 class ObjectSerializerTest extends TestCase
 {
@@ -53,7 +54,7 @@ class ObjectSerializerTest extends TestCase
     public function testValueResolverSerialize(): void
     {
         $fakeObject = new FakeObjectWithFieldResolver();
-        $fakeObject->dateTime = new \DateTime('now');
+        $fakeObject->dateTime = new DateTime('now');
 
         $result = $this->serializer->serialize($fakeObject);
 

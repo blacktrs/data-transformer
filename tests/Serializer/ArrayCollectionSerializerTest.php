@@ -8,6 +8,8 @@ use Blacktrs\DataTransformer\Serializer\ArrayCollectionSerializer;
 use Blacktrs\DataTransformer\Tests\Fake\Item\FakeSimpleObjectWithConstructor;
 use PHPUnit\Framework\TestCase;
 
+use function count;
+
 class ArrayCollectionSerializerTest extends TestCase
 {
     public function testArrayCollectionSerialize(): void
@@ -20,7 +22,7 @@ class ArrayCollectionSerializerTest extends TestCase
 
         $result = $serializer->serialize($data);
 
-        self::assertCount(\count($data), $result);
+        self::assertCount(count($data), $result);
         self::assertIsArray($result[0]);
         self::assertIsArray($result[1]);
     }
