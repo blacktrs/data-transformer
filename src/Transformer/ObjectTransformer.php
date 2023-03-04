@@ -13,8 +13,14 @@ use ReflectionProperty;
 use ReflectionUnionType;
 
 use function array_key_exists;
+use function class_exists;
 use function is_string;
+use function settype;
 
+/*
+ * Basic object transformer implementation
+ * Using for converting array to target object
+ */
 class ObjectTransformer implements ObjectTransformerInterface
 {
     use Fieldable;
@@ -43,7 +49,6 @@ class ObjectTransformer implements ObjectTransformerInterface
     private function handleItem(): void
     {
         $reflection = new ReflectionClass($this->object);
-
         $properties = $reflection->getProperties();
 
         foreach ($properties as $property) {
@@ -78,28 +83,12 @@ class ObjectTransformer implements ObjectTransformerInterface
         /** @var ReflectionNamedType|ReflectionIntersectionType|ReflectionUnionType $reflectionType */
         $reflectionType = $property->getType();
 
-        if (
-            $field->valueResolver !== null
-            && is_subclass_of($field->valueResolver, ValueResolverInterface::class)
-        ) {
-            /** @var ValueResolverInterface $valueTransformer */
-            $valueTransformer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
-
-            return $valueTransformer->transform($this->data[$name]);
+        if ($this->fieldHasValueResolver($field)) {
+            return $this->getValueFromValueResolver($field, $name);
         }
 
-        if (
-            $field->objectTransformer !== null
-            && is_subclass_of($field->objectTransformer, ObjectTransformerInterface::class)
-            && $property->hasType()
-        ) {
-            /** @var ObjectTransformerInterface $objectTransformer */
-            $objectTransformer = is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
-
-            /** @var class-string $objectClass */
-            $objectClass = $this->getType($reflectionType);
-
-            return $objectTransformer->transform($objectClass, $this->data[$name]);
+        if ($this->fieldHasObjectResolver($field, $property)) {
+            return $this->getValueFromObjectResolver($field, $reflectionType, $name);
         }
 
         $value = $this->data[$name];
@@ -129,5 +118,40 @@ class ObjectTransformer implements ObjectTransformerInterface
             $type instanceof ReflectionNamedType => $type->getName(),
             $type instanceof ReflectionUnionType, $type instanceof ReflectionIntersectionType => $type->getTypes()[0]->getName()
         };
+    }
+
+    private function fieldHasValueResolver(TransformerField $field): bool
+    {
+        return $field->valueResolver !== null
+            && is_subclass_of($field->valueResolver, ValueResolverInterface::class);
+    }
+
+    private function fieldHasObjectResolver(TransformerField $field, ReflectionProperty $property): bool
+    {
+        return $field->objectTransformer !== null
+            && is_subclass_of($field->objectTransformer, ObjectTransformerInterface::class)
+            && $property->hasType();
+    }
+
+    private function getValueFromValueResolver(TransformerField $field, string $name): mixed
+    {
+        /** @var ValueResolverInterface $valueTransformer */
+        $valueTransformer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
+
+        return $valueTransformer->transform($this->data[$name]);
+    }
+
+    private function getValueFromObjectResolver(
+        TransformerField $field,
+        ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType $reflectionType,
+        string $name
+    ): mixed {
+        /** @var ObjectTransformerInterface $objectTransformer */
+        $objectTransformer = is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
+
+        /** @var class-string $objectClass */
+        $objectClass = $this->getType($reflectionType);
+
+        return $objectTransformer->transform($objectClass, $this->data[$name]);
     }
 }

@@ -2,14 +2,15 @@
     "name": "blacktrs/data-transformer",
     "type": "library",
     "require": {
-        "php": ">=8.1"
+        "php": ">=8.2"
     },
     "require-dev": {
-        "symfony/var-dumper": "^6.1",
-        "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "^1.8",
-        "vimeo/psalm": "^4.26",
-        "friendsofphp/php-cs-fixer": "^3.10"
+        "symfony/var-dumper": "^6.2",
+        "phpunit/phpunit": "^10",
+        "phpstan/phpstan": "^1.10",
+        "vimeo/psalm": "^5.7",
+        "friendsofphp/php-cs-fixer": "^3.14",
+        "rector/rector": "^0.15.19"
     },
     "license": "MIT",
     "autoload": {
@@ -28,7 +29,7 @@
             "email": "taras.chr@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "scripts": {
         "test": [
             "php-cs-fixer fix --dry-run",

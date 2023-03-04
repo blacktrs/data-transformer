@@ -9,6 +9,9 @@ use ReflectionClass;
 
 use function is_string;
 
+/*
+ * Basic wrapper for converting an object to an array
+ */
 class ObjectSerializer implements ObjectSerializerInterface
 {
     public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): mixed

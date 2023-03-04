@@ -14,7 +14,7 @@ class FakeObjectWithGetters
         #[TransformerField]
         public readonly int $age,
         #[TransformerField]
-        private readonly bool $isHuman
+        private bool $isHuman
     ) {
     }
 

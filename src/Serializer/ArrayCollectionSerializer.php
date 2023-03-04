@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Serializer;
 
+/*
+ * The wrapper for converting the object collection to an array data collection
+ */
 class ArrayCollectionSerializer
 {
     /**

@@ -13,6 +13,9 @@ use function is_string;
 use function is_object;
 use function is_callable;
 
+/*
+ * Basic implementation for converting an object to an array
+ */
 class ArrayObjectSerializer implements ObjectSerializerInterface
 {
     use Fieldable;
@@ -59,7 +62,7 @@ class ArrayObjectSerializer implements ObjectSerializerInterface
         object $object,
         ?ObjectSerializerInterface $originSerializer
     ): mixed {
-        $value = $this->getValueFromMethods($object, $property);
+        $value = $this->getValueFromGetterMethod($object, $property);
 
         if ($field->valueResolver !== null && is_subclass_of($field->valueResolver, ValueResolverInterface::class)) {
             $serializer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
@@ -68,17 +71,13 @@ class ArrayObjectSerializer implements ObjectSerializerInterface
         }
 
         if (is_object($value)) {
-            if ($originSerializer) {
-                return $originSerializer->serialize($value);
-            }
-
-            return $this->serialize($value);
+            return $originSerializer ? $originSerializer->serialize($value) : $this->serialize($value);
         }
 
         return $value;
     }
 
-    private function getValueFromMethods(object $object, ReflectionProperty $property): mixed
+    private function getValueFromGetterMethod(object $object, ReflectionProperty $property): mixed
     {
         if (is_callable([$object, $property->getName()])) {
             $methodName = $property->getName();

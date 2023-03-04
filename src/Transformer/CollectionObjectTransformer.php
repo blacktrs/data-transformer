@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Transformer;
 
+/*
+ * The wrapper for converting an array data collection to an object collection
+ * Based on default transformer implementation
+ */
 class CollectionObjectTransformer
 {
     /**
