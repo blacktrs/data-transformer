@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Fake\Item;
 
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 
 class FakeObjectWithPrivateProperties
 {
-    #[TransformerField]
+    #[DataField]
     private string $name;
 
     private int $age = 0;

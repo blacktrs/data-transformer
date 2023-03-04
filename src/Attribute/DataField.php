@@ -9,7 +9,7 @@ use Blacktrs\DataTransformer\Transformer\{TransformerInterface};
 use Blacktrs\DataTransformer\Value\ValueResolverInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-readonly class TransformerField
+readonly class DataField
 {
     public function __construct(
         public ?string $nameIn = null,

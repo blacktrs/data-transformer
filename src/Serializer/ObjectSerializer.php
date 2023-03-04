@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Serializer;
 
-use Blacktrs\DataTransformer\Attribute\TransformerObject;
+use Blacktrs\DataTransformer\Attribute\DataObject;
 use Blacktrs\DataTransformer\Serializer\Serializer\ArraySerializer;
 use ReflectionClass;
 
@@ -20,27 +20,28 @@ class ObjectSerializer implements ObjectSerializerInterface
         $reflection = new ReflectionClass($object);
         $objectItem = $this->getTransformerObject($reflection);
 
-        return $this->getObjectSerializer($objectItem)->serialize($object, $this);
+        return $this->getObjectSerializer($objectItem, $originSerializer)->serialize($object, $this);
     }
 
-    private function getObjectSerializer(TransformerObject $objectItem): ObjectSerializerInterface
-    {
-        if ($objectItem->serializer === null) {
-            return new ArraySerializer();
-        }
+    private function getObjectSerializer(
+        DataObject $objectItem,
+        ObjectSerializerInterface|string|null $originSerializer
+    ): ObjectSerializerInterface {
+        /** @var ObjectSerializerInterface|class-string<ObjectSerializerInterface> $serializer */
+        $serializer = $objectItem->serializer ?? $originSerializer ?? new ArraySerializer();
 
-        return is_string($objectItem->serializer) ? new $objectItem->serializer() : $objectItem->serializer;
+        return is_string($serializer) ? new $serializer() : $serializer;
     }
 
     /**
      * @param ReflectionClass<object> $reflection
      */
-    private function getTransformerObject(ReflectionClass $reflection): TransformerObject
+    private function getTransformerObject(ReflectionClass $reflection): DataObject
     {
-        $objectItem = $reflection->getAttributes(TransformerObject::class)[0] ?? null;
+        $objectItem = $reflection->getAttributes(DataObject::class)[0] ?? null;
 
         if ($objectItem === null) {
-            return new TransformerObject();
+            return new DataObject();
         }
 
         return $objectItem->newInstance();

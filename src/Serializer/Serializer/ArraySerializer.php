@@ -19,9 +19,9 @@ class ArraySerializer implements ObjectSerializerInterface
 
     /**
      * @param ObjectSerializerInterface|class-string<ObjectSerializerInterface>|null $originSerializer
-     * @return iterable<array-key, mixed>
+     * @return array<array-key, mixed>
      */
-    public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): iterable
+    public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): array
     {
         $reflection = new ReflectionClass($object);
         $properties = $reflection->getProperties();

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Blacktrs\DataTransformer\Transformer;
 
 use Blacktrs\DataTransformer\{Fieldable, Value\ValueResolverInterface};
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
@@ -69,7 +69,7 @@ class Transformer implements TransformerInterface
         }
     }
 
-    private function isPropertyWritable(ReflectionProperty $property, TransformerField $field): bool
+    private function isPropertyWritable(ReflectionProperty $property, DataField $field): bool
     {
         if ($property->isReadOnly()) {
             return !$field->ignoreTransform && !$property->isInitialized($this->object);
@@ -78,7 +78,7 @@ class Transformer implements TransformerInterface
         return !$field->ignoreTransform;
     }
 
-    private function getValue(TransformerField $field, ReflectionProperty $property, string $name): mixed
+    private function getValue(DataField $field, ReflectionProperty $property, string $name): mixed
     {
         /** @var ReflectionNamedType|ReflectionIntersectionType|ReflectionUnionType $reflectionType */
         $reflectionType = $property->getType();
@@ -120,20 +120,20 @@ class Transformer implements TransformerInterface
         };
     }
 
-    private function fieldHasValueResolver(TransformerField $field): bool
+    private function fieldHasValueResolver(DataField $field): bool
     {
         return $field->valueResolver !== null
             && is_subclass_of($field->valueResolver, ValueResolverInterface::class);
     }
 
-    private function fieldHasObjectResolver(TransformerField $field, ReflectionProperty $property): bool
+    private function fieldHasObjectResolver(DataField $field, ReflectionProperty $property): bool
     {
         return $field->objectTransformer !== null
             && is_subclass_of($field->objectTransformer, TransformerInterface::class)
             && $property->hasType();
     }
 
-    private function getValueFromValueResolver(TransformerField $field, string $name): mixed
+    private function getValueFromValueResolver(DataField $field, string $name): mixed
     {
         /** @var ValueResolverInterface $valueTransformer */
         $valueTransformer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
@@ -142,7 +142,7 @@ class Transformer implements TransformerInterface
     }
 
     private function getValueFromObjectResolver(
-        TransformerField $field,
+        DataField $field,
         ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType $reflectionType,
         string $name
     ): mixed {

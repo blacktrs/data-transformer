@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Fake\Item;
 
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 
 class FakeSimpleObjectWithConstructor
 {
     public function __construct(
-        #[TransformerField]
+        #[DataField]
         public readonly int $id,
-        #[TransformerField]
+        #[DataField]
         public readonly string $label,
     ) {
     }

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Fake\RandomUserApi;
 
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 
 class Name
 {
-    #[TransformerField]
+    #[DataField]
     public readonly string $title;
 
-    #[TransformerField(nameIn: 'first')]
+    #[DataField(nameIn: 'first')]
     public readonly string $firstName;
 
-    #[TransformerField(nameIn: 'last')]
+    #[DataField(nameIn: 'last')]
     public readonly string $lastName;
 }

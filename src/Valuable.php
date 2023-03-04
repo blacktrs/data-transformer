@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer;
 
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 use Blacktrs\DataTransformer\Serializer\ObjectSerializerInterface;
 use Blacktrs\DataTransformer\Value\ValueResolverInterface;
 use ReflectionProperty;
@@ -16,7 +16,7 @@ use function is_string;
 trait Valuable
 {
     private function getFieldValue(
-        TransformerField $field,
+        DataField $field,
         ReflectionProperty $property,
         object $object,
         ?ObjectSerializerInterface $originSerializer

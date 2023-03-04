@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Fake\Item;
 
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 
 class FakeObjectWithFieldNameDeclaration
 {
-    #[TransformerField(nameIn: 'origin_name')]
+    #[DataField(nameIn: 'origin_name')]
     public readonly string $customName;
 }

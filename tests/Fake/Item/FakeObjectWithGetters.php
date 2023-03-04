@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Fake\Item;
 
-use Blacktrs\DataTransformer\Attribute\TransformerField;
+use Blacktrs\DataTransformer\Attribute\DataField;
 
 class FakeObjectWithGetters
 {
     public function __construct(
-        #[TransformerField]
+        #[DataField]
         private readonly string $name,
-        #[TransformerField]
+        #[DataField]
         public readonly int $age,
-        #[TransformerField]
+        #[DataField]
         private bool $isHuman
     ) {
     }

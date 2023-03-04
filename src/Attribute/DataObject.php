@@ -8,7 +8,7 @@ use Attribute;
 use Blacktrs\DataTransformer\Serializer\ObjectSerializerInterface;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-readonly class TransformerObject
+readonly class DataObject
 {
     public function __construct(
         /**
