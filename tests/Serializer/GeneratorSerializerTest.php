@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Serializer;
 
-use Blacktrs\DataTransformer\Serializer\Serializer\{CollectionSerializer, GeneratorSerializer};
+use Blacktrs\DataTransformer\Serializer\Serializer\{Blacktrs\DataTransformer\Serializer\CollectionSerializer,
+    GeneratorSerializer};
 use Blacktrs\DataTransformer\Tests\Fake\Item\FakeSimpleObjectWithConstructor;
-use PHPUnit\Framework\TestCase;
 use Generator;
+use PHPUnit\Framework\TestCase;
 
 class GeneratorSerializerTest extends TestCase
 {

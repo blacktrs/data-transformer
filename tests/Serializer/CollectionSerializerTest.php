@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Serializer;
 
-use Blacktrs\DataTransformer\Serializer\Serializer\CollectionSerializer;
+use Blacktrs\DataTransformer\Serializer\CollectionSerializer;
 use Blacktrs\DataTransformer\Tests\Fake\Item\FakeSimpleObjectWithConstructor;
 use PHPUnit\Framework\TestCase;
 

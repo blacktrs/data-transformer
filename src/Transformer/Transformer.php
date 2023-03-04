@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Transformer;
 
+use Blacktrs\DataTransformer\{Fieldable, Value\ValueResolverInterface};
 use Blacktrs\DataTransformer\Attribute\TransformerField;
-use Blacktrs\DataTransformer\{Fieldable, ValueResolverInterface};
 use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;

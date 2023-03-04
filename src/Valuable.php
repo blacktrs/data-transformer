@@ -6,11 +6,12 @@ namespace Blacktrs\DataTransformer;
 
 use Blacktrs\DataTransformer\Attribute\TransformerField;
 use Blacktrs\DataTransformer\Serializer\ObjectSerializerInterface;
+use Blacktrs\DataTransformer\Value\ValueResolverInterface;
 use ReflectionProperty;
 
-use function is_string;
-use function is_object;
 use function is_callable;
+use function is_object;
+use function is_string;
 
 trait Valuable
 {

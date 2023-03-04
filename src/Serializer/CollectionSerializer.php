@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Blacktrs\DataTransformer\Serializer\Serializer;
+namespace Blacktrs\DataTransformer\Serializer;
 
 /**
  * @description The wrapper for converting the object collection to an array data collection
  */
 
-use Blacktrs\DataTransformer\Serializer\{CollectionSerializerInterface, ObjectSerializerInterface};
+use Blacktrs\DataTransformer\Serializer\{Serializer\ArraySerializer};
 
 class CollectionSerializer implements CollectionSerializerInterface
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Blacktrs\DataTransformer;
+namespace Blacktrs\DataTransformer\Value;
 
 interface ValueResolverInterface
 {

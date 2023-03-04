@@ -6,7 +6,7 @@ namespace Blacktrs\DataTransformer\Attribute;
 
 use Attribute;
 use Blacktrs\DataTransformer\Transformer\{TransformerInterface};
-use Blacktrs\DataTransformer\ValueResolverInterface;
+use Blacktrs\DataTransformer\Value\ValueResolverInterface;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 readonly class TransformerField

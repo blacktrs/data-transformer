@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Serializer\Serializer;
 
-use Blacktrs\DataTransformer\{Fieldable, Serializer\ObjectSerializerInterface, Valuable, ValueResolverInterface};
+use Blacktrs\DataTransformer\{Fieldable, Serializer\ObjectSerializerInterface, Valuable};
 use ReflectionClass;
 
 use function is_string;

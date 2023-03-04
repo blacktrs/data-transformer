@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Transformer;
 
-use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldNameDeclaration,
+use Blacktrs\DataTransformer\Tests\Fake\Item\{
+    FakeObjectWithFieldNameDeclaration,
     FakeObjectWithFieldResolver,
     FakeObjectWithOtherItem,
     FakeObjectWithPrivateProperties,
-    FakeSimpleObject};
+    FakeSimpleObject
+};
 use Blacktrs\DataTransformer\Transformer\Transformer;
 use PHPUnit\Framework\TestCase;
 use DateTime;

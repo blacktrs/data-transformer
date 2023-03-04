@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Blacktrs\DataTransformer\Tests\Fake\Field;
+namespace Blacktrs\DataTransformer\Value;
 
-use Blacktrs\DataTransformer\ValueResolverInterface;
 use DateTime;
 
-class FakeDateTimeValueResolver implements ValueResolverInterface
+class DateTimeValueResolver implements ValueResolverInterface
 {
     public function transform(mixed $value): DateTime
     {
