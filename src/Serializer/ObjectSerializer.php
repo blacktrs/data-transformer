@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Blacktrs\DataTransformer\Serializer;
 
 use Blacktrs\DataTransformer\Attribute\TransformerObject;
+use Blacktrs\DataTransformer\Serializer\Serializer\ArraySerializer;
 use ReflectionClass;
 
 use function is_string;
 
-/*
- * Basic wrapper for converting an object to an array
+/**
+ * @description Basic wrapper for converting an object to an array
  */
 class ObjectSerializer implements ObjectSerializerInterface
 {
@@ -25,7 +26,7 @@ class ObjectSerializer implements ObjectSerializerInterface
     private function getObjectSerializer(TransformerObject $objectItem): ObjectSerializerInterface
     {
         if ($objectItem->serializer === null) {
-            return new ArrayObjectSerializer();
+            return new ArraySerializer();
         }
 
         return is_string($objectItem->serializer) ? new $objectItem->serializer() : $objectItem->serializer;

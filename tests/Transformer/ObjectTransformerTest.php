@@ -9,17 +9,17 @@ use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldNameDeclaration
     FakeObjectWithOtherItem,
     FakeObjectWithPrivateProperties,
     FakeSimpleObject};
-use Blacktrs\DataTransformer\Transformer\ObjectTransformer;
+use Blacktrs\DataTransformer\Transformer\Transformer;
 use PHPUnit\Framework\TestCase;
 use DateTime;
 
 class ObjectTransformerTest extends TestCase
 {
-    private ObjectTransformer $transformer;
+    private Transformer $transformer;
 
     public function setUp(): void
     {
-        $this->transformer = new ObjectTransformer();
+        $this->transformer = new Transformer();
     }
 
     public function testSimpleTransformation(): void

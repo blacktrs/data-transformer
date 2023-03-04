@@ -27,6 +27,7 @@ return (new Config())
                 'import_functions' => true,
                 'import_classes' => true,
             ],
+            'no_unused_imports' => true,
         ]
     )
     ->setFinder($finder);

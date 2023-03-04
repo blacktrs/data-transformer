@@ -27,7 +27,7 @@ class RequestObject
 
 $requestPayload = ['id' => 1, 'email' => 'some.email@example.com', 'name' => 'John Doe'];
 
-$transformer = new \Blacktrs\DataTransformer\Transformer\ObjectTransformer();
+$transformer = new \Blacktrs\DataTransformer\Transformer\Transformer();
 $requestObject = $transformer->transform(RequestObject::class, $requestPayload);
 
 echo $requestObject->id; // 1

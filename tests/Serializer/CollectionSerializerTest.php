@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Serializer;
 
-use Blacktrs\DataTransformer\Serializer\ArrayCollectionSerializer;
+use Blacktrs\DataTransformer\Serializer\Serializer\CollectionSerializer;
 use Blacktrs\DataTransformer\Tests\Fake\Item\FakeSimpleObjectWithConstructor;
 use PHPUnit\Framework\TestCase;
 
 use function count;
 
-class ArrayCollectionSerializerTest extends TestCase
+class CollectionSerializerTest extends TestCase
 {
     public function testArrayCollectionSerialize(): void
     {
-        $serializer = new ArrayCollectionSerializer();
+        $serializer = new CollectionSerializer();
         $data = [
             new FakeSimpleObjectWithConstructor(123, 'First label'),
             new FakeSimpleObjectWithConstructor(1000, 'Second label')

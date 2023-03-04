@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Transformer;
 
-interface ObjectTransformerInterface
+interface TransformerInterface
 {
     /**
      * @param class-string $objectClass

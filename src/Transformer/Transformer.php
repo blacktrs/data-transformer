@@ -21,7 +21,7 @@ use function settype;
  * Basic object transformer implementation
  * Using for converting array to target object
  */
-class ObjectTransformer implements ObjectTransformerInterface
+class Transformer implements TransformerInterface
 {
     use Fieldable;
 
@@ -129,7 +129,7 @@ class ObjectTransformer implements ObjectTransformerInterface
     private function fieldHasObjectResolver(TransformerField $field, ReflectionProperty $property): bool
     {
         return $field->objectTransformer !== null
-            && is_subclass_of($field->objectTransformer, ObjectTransformerInterface::class)
+            && is_subclass_of($field->objectTransformer, TransformerInterface::class)
             && $property->hasType();
     }
 
@@ -146,7 +146,7 @@ class ObjectTransformer implements ObjectTransformerInterface
         ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType $reflectionType,
         string $name
     ): mixed {
-        /** @var ObjectTransformerInterface $objectTransformer */
+        /** @var TransformerInterface $objectTransformer */
         $objectTransformer = is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
 
         /** @var class-string $objectClass */

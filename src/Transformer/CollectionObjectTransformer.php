@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Transformer;
 
-/*
- * The wrapper for converting an array data collection to an object collection
- * Based on default transformer implementation
+/**
+ * @description The wrapper for converting an array data collection to an object collection
  */
-class CollectionObjectTransformer
+class CollectionObjectTransformer implements CollectionTransformerInterface
 {
     /**
      * @param class-string $objectClass
      * @param array<array-key, array<array-key, mixed>> $data
+     * @param TransformerInterface|null $transformer
      * @return iterable<object>
      */
-    public function transform(string $objectClass, iterable $data): iterable
+    public function transform(string $objectClass, iterable $data, ?TransformerInterface $transformer = null): iterable
     {
-        $objectTransformer = new ObjectTransformer();
+        $objectTransformer = new Transformer();
         $collection = [];
 
         foreach ($data as $item) {

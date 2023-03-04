@@ -8,13 +8,13 @@ use Attribute;
 use Blacktrs\DataTransformer\Serializer\ObjectSerializerInterface;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class TransformerObject
+readonly class TransformerObject
 {
     public function __construct(
         /**
          * @var ObjectSerializerInterface|class-string<ObjectSerializerInterface>|null $objectTransformer
          */
-        public readonly ObjectSerializerInterface|string|null $serializer = null
+        public ObjectSerializerInterface|string|null $serializer = null
     ) {
     }
 }
