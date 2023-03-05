@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Blacktrs\DataTransformer\Tests\RandomUserApi;
 
 use Blacktrs\DataTransformer\Tests\Fake\RandomUserApi\RandomUser;
-use Blacktrs\DataTransformer\Transformer\CollectionObjectTransformer;
+use Blacktrs\DataTransformer\Transformer\CollectionTransformer;
 use PHPUnit\Framework\TestCase;
 
 use function count;
@@ -18,7 +18,7 @@ class RandomUserApiResponseTransformerTest extends TestCase
         $json = file_get_contents(__DIR__.'/_mock/mock.json');
         $users = json_decode($json, true)['results'];
 
-        $transformer = new CollectionObjectTransformer();
+        $transformer = new CollectionTransformer();
         $collection = $transformer->transform(RandomUser::class, $users);
 
         self::assertCount(count($users), $collection);

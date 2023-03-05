@@ -61,9 +61,7 @@ class Transformer implements TransformerInterface
             $name = $field->nameIn ?? $property->getName();
 
             if (array_key_exists($name, $this->data)) {
-                $property->setAccessible(true);
                 $value = $this->getValue($field, $property, $name);
-
                 $property->setValue($this->object, $value);
             }
         }
@@ -113,7 +111,7 @@ class Transformer implements TransformerInterface
      */
     private function getType(ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type): string
     {
-        /** @psalm-suppress UndefinedMethod */
+        /** @psalm-suppress PossiblyUndefinedMethod */
         return match (true) {
             $type instanceof ReflectionNamedType => $type->getName(),
             $type instanceof ReflectionUnionType, $type instanceof ReflectionIntersectionType => $type->getTypes()[0]->getName()

@@ -12,7 +12,7 @@ interface CollectionSerializerInterface
     /**
      * @param iterable<object> $objects
      * @param (ArrayAccess<array-key, mixed>&Traversable<array-key, mixed>)|array<array-key, mixed>|null $collection
-     * @return (ArrayAccess<array-key, mixed>&Traversable<array-key, mixed>)|array<array-key, mixed>
+     * @return (ArrayAccess<array-key, mixed>&Traversable<array-key, mixed>)|array<array-key, mixed>|iterable<mixed>
      */
     public function serialize(
         iterable $objects,

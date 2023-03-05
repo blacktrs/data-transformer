@@ -7,7 +7,7 @@ namespace Blacktrs\DataTransformer\Transformer;
 /**
  * @description The wrapper for converting an array data collection to an object collection
  */
-class CollectionObjectTransformer implements CollectionTransformerInterface
+class CollectionTransformer implements CollectionTransformerInterface
 {
     /**
      * @param class-string $objectClass
