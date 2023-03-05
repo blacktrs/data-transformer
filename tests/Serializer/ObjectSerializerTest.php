@@ -6,6 +6,7 @@ namespace Blacktrs\DataTransformer\Tests\Serializer;
 
 use Blacktrs\DataTransformer\Serializer\ObjectSerializer;
 use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldResolver,
+    FakeObjectWithFieldResolverAndArguments,
     FakeObjectWithGetters,
     FakeObjectWithOtherItem,
     FakeSimpleObject,
@@ -60,6 +61,16 @@ class ObjectSerializerTest extends TestCase
 
         self::assertArrayHasKey('dateTime', $result);
         self::assertSame($result['dateTime'], $fakeObject->dateTime->format(DATE_ATOM));
+    }
+    public function testValueResolverWithArgumentsSerialize(): void
+    {
+        $fakeObject = new FakeObjectWithFieldResolverAndArguments();
+        $fakeObject->dateTime = new DateTime('now');
+
+        $result = $this->serializer->serialize($fakeObject);
+
+        self::assertArrayHasKey('dateTime', $result);
+        self::assertSame($result['dateTime'], $fakeObject->dateTime->format(DATE_RFC7231));
     }
 
     public function testGetterDataSerialize(): void

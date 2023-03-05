@@ -82,7 +82,7 @@ class Transformer implements TransformerInterface
         $reflectionType = $property->getType();
 
         if ($this->fieldHasValueResolver($field)) {
-            return $this->getValueFromValueResolver($field, $name);
+            return $this->getValueFromValueResolver($field, $name, $field->valueResolverArguments);
         }
 
         if ($this->fieldHasObjectResolver($field, $property)) {
@@ -131,12 +131,12 @@ class Transformer implements TransformerInterface
             && $property->hasType();
     }
 
-    private function getValueFromValueResolver(DataField $field, string $name): mixed
+    private function getValueFromValueResolver(DataField $field, string $name, array $arguments): mixed
     {
         /** @var ValueResolverInterface $valueTransformer */
         $valueTransformer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
-        return $valueTransformer->transform($this->data[$name]);
+        return $valueTransformer->transform($this->data[$name], ...$arguments);
     }
 
     private function getValueFromObjectResolver(
