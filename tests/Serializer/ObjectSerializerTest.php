@@ -62,6 +62,7 @@ class ObjectSerializerTest extends TestCase
         self::assertArrayHasKey('dateTime', $result);
         self::assertSame($result['dateTime'], $fakeObject->dateTime->format(DATE_ATOM));
     }
+
     public function testValueResolverWithArgumentsSerialize(): void
     {
         $fakeObject = new FakeObjectWithFieldResolverAndArguments();

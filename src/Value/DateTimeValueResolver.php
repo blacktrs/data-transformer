@@ -8,15 +8,19 @@ use DateTime;
 
 class DateTimeValueResolver implements ValueResolverInterface
 {
-    public function transform(mixed $value, ...$arguments): DateTime
+    /**
+     * @param array<mixed> $arguments
+     */
+    public function transform(mixed $value, array $arguments): DateTime
     {
         return new DateTime($value);
     }
 
     /**
      * @param DateTime $value
+     * @param array<mixed> $arguments
      */
-    public function serialize(mixed $value, ...$arguments): string
+    public function serialize(mixed $value, array $arguments): string
     {
         $format = $arguments['format'] ?? DATE_ATOM;
 

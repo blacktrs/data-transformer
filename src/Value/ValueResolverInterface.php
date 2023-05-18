@@ -6,7 +6,13 @@ namespace Blacktrs\DataTransformer\Value;
 
 interface ValueResolverInterface
 {
-    public function transform(mixed $value, ...$arguments): mixed;
+    /**
+     * @param array<mixed> $arguments
+     */
+    public function transform(mixed $value, array $arguments): mixed;
 
-    public function serialize(mixed $value, ...$arguments): mixed;
+    /**
+     * @param array<mixed> $arguments
+     */
+    public function serialize(mixed $value, array $arguments): mixed;
 }

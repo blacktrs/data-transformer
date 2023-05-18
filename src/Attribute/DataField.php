@@ -19,6 +19,9 @@ readonly class DataField
          * @var ValueResolverInterface|class-string<ValueResolverInterface>|null $valueTransformer
          */
         public ValueResolverInterface|string|null $valueResolver = null,
+        /**
+         * @var array<mixed>
+         */
         public array $valueResolverArguments = [],
 
         /**

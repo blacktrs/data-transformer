@@ -26,7 +26,7 @@ trait Valuable
         if ($field->valueResolver !== null && is_subclass_of($field->valueResolver, ValueResolverInterface::class)) {
             $serializer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
-            return $serializer->serialize($value, ...$field->valueResolverArguments);
+            return $serializer->serialize($value, $field->valueResolverArguments);
         }
 
         if (is_object($value)) {

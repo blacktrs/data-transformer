@@ -131,12 +131,15 @@ class Transformer implements TransformerInterface
             && $property->hasType();
     }
 
+    /**
+     * @param array<mixed> $arguments
+     */
     private function getValueFromValueResolver(DataField $field, string $name, array $arguments): mixed
     {
         /** @var ValueResolverInterface $valueTransformer */
         $valueTransformer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
-        return $valueTransformer->transform($this->data[$name], ...$arguments);
+        return $valueTransformer->transform($this->data[$name], $arguments);
     }
 
     private function getValueFromObjectResolver(
