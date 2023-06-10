@@ -12,6 +12,9 @@ use ReflectionNamedType;
 use ReflectionProperty;
 use ReflectionUnionType;
 
+use BackedEnum;
+use UnitEnum;
+
 use function array_key_exists;
 use function class_exists;
 use function is_string;
@@ -21,6 +24,7 @@ use function settype;
  * Basic object transformer implementation
  * Using for converting array to target object
  */
+
 class Transformer implements TransformerInterface
 {
     use Fieldable;
@@ -96,6 +100,18 @@ class Transformer implements TransformerInterface
                 settype($value, $reflectionType->getName());
 
                 return $value;
+            }
+
+            if (enum_exists($reflectionType->getName())) {
+                /** @var class-string<UnitEnum>|class-string<BackedEnum> $enum */
+                $enum = $reflectionType->getName();
+                if (is_subclass_of($enum, BackedEnum::class)) {
+                    return $enum::tryFrom($value);
+                }
+
+                $cases = array_values(array_filter($enum::cases(), fn (UnitEnum $unitEnum) => $unitEnum->name === $value));
+
+                return $cases[0] ?? throw new TransformerException(sprintf('No enum case found for %s in %s', $value, $enum));
             }
 
             if (class_exists($reflectionType->getName())) {

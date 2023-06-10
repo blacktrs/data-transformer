@@ -9,6 +9,9 @@ use Blacktrs\DataTransformer\Serializer\ObjectSerializerInterface;
 use Blacktrs\DataTransformer\Value\ValueResolverInterface;
 use ReflectionProperty;
 
+use BackedEnum;
+use UnitEnum;
+
 use function is_callable;
 use function is_object;
 use function is_string;
@@ -27,6 +30,14 @@ trait Valuable
             $serializer = is_string($field->valueResolver) ? new $field->valueResolver() : $field->valueResolver;
 
             return $serializer->serialize($value, $field->valueResolverArguments);
+        }
+
+        if ($value instanceof BackedEnum) {
+            return $value->value;
+        }
+
+        if ($value instanceof UnitEnum) {
+            return $value->name;
         }
 
         if (is_object($value)) {

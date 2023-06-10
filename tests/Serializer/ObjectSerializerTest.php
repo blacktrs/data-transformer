@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Blacktrs\DataTransformer\Tests\Serializer;
 
 use Blacktrs\DataTransformer\Serializer\ObjectSerializer;
-use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithFieldResolver,
+use Blacktrs\DataTransformer\Tests\Fake\Enum\{FakeColorEnum, FakeSizeEnum};
+use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithEnumProperty,
+    FakeObjectWithFieldResolver,
     FakeObjectWithFieldResolverAndArguments,
     FakeObjectWithGetters,
     FakeObjectWithOtherItem,
@@ -82,5 +84,18 @@ class ObjectSerializerTest extends TestCase
         self::assertSame('John Doe1', $result['name']);
         self::assertSame(42, $result['age']);
         self::assertTrue($result['isHuman']);
+    }
+
+    public function testEnumSerialize(): void
+    {
+        $fakeObject = new FakeObjectWithEnumProperty();
+        $fakeObject->id = 1;
+        $fakeObject->name = 'John Doe';
+        $fakeObject->color = FakeColorEnum::BLUE;
+        $fakeObject->size = FakeSizeEnum::XL;
+        $result = $this->serializer->serialize($fakeObject);
+
+        self::assertSame(FakeColorEnum::BLUE, FakeColorEnum::from($result['color']));
+        self::assertSame(FakeSizeEnum::XL->name, $result['size']);
     }
 }

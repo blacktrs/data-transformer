@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Blacktrs\DataTransformer\Tests\Transformer;
 
 use Blacktrs\DataTransformer\Tests\Fake\Item\{
+    FakeObjectWithEnumProperty,
     FakeObjectWithFieldNameDeclaration,
     FakeObjectWithFieldResolver,
     FakeObjectWithOtherItem,
@@ -87,5 +88,16 @@ class ObjectTransformerTest extends TestCase
         $fakeObject = $this->transformer->transform(FakeObjectWithPrivateProperties::class, $data);
 
         self::assertNotSame($fakeObject->getAge(), $data['age']);
+    }
+
+    public function testEnumPropertyTransformation(): void
+    {
+        $data = ['id' => 1, 'name' => 'John Doe', 'color' => 'green', 'size' => 'L'];
+
+        /** @var FakeObjectWithEnumProperty $fakeObject */
+        $fakeObject = $this->transformer->transform(FakeObjectWithEnumProperty::class, $data);
+
+        self::assertSame($fakeObject->color->value, $data['color']);
+        self::assertSame($fakeObject->size->name, $data['size']);
     }
 }
