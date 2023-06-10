@@ -1,6 +1,6 @@
 # Data transformer
 
-The modern PHP library for converting arrays into objects and vice-versa. 
+The modern PHP library for converting arrays into objects and vice-versa.
 
 ## Installation
 
@@ -43,14 +43,19 @@ class RequestObject
     public readonly int $id;
     public readonly string $email;
     public readonly string $name;
+    #[\Blacktrs\DataTransformer\Attribute\DataField(valueResolver: \Blacktrs\DataTransformer\Value\DateTimeValueResolver::class)]
+    public readonly \DateTime $date;
 }
 
-$requestPayload = ['id' => 1, 'email' => 'some.email@example.com', 'name' => 'John Doe'];
+$requestPayload = ['id' => 1, 'email' => 'some.email@example.com', 'name' => 'John Doe', 'date' => '2023-06-01 10:10:10'];
 
 $transformer = new \Blacktrs\DataTransformer\Transformer\Transformer();
 $requestObject = $transformer->transform(RequestObject::class, $requestPayload);
 
 echo $requestObject->id; // 1
+echo $requestObject->email; // some.email@example.com
+echo $requestObject->name; // John Doe
+echo $requestObject->date->format('Y-m-d'); // 2023-06-01
 ```
 
 ### Convert the object into the array
