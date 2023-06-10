@@ -95,7 +95,7 @@ class ObjectSerializerTest extends TestCase
         $fakeObject->size = FakeSizeEnum::XL;
         $result = $this->serializer->serialize($fakeObject);
 
-        self::assertSame(FakeColorEnum::BLUE, FakeColorEnum::from($result['color']));
-        self::assertSame(FakeSizeEnum::XL->name, $result['size']);
+        self::assertSame($fakeObject->color, FakeColorEnum::from($result['color']));
+        self::assertSame($fakeObject->size->name, $result['size']);
     }
 }
