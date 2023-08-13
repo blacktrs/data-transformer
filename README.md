@@ -76,6 +76,8 @@ echo $requestObject->date->format('Y-m-d'); // 2023-06-01
 ### Convert the object into the array
 
 ```php
+use Blacktrs\DataTransformer\Serializer\ObjectSerializer;
+
 class ResponseObject
 {
     public function __construct(
