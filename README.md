@@ -16,8 +16,9 @@ However, it is possible to configure needed properties with attributes.
 
 ### Features
 * Seamless converting of objects into arrays and vice-versa
-* The library respects declared property type
-* The library will respect private properties unless they will be declared explicitly as writable by the attribute 
+* Auto conversion of nested properties with class type-hint into array and vice-versa
+* The library respects the declared property type
+* The library will respect private properties unless they will be declared explicitly as writable by the attribute
 * The library takes into account getters or methods with the same name as a property
 * Enum conversion
 * Stringable objects conversion
