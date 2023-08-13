@@ -1,16 +1,16 @@
 {
     "name": "blacktrs/data-transformer",
     "type": "library",
+    "version": "1.0.0",
     "require": {
         "php": ">=8.2"
     },
     "require-dev": {
-        "symfony/var-dumper": "^6.2",
+        "symfony/var-dumper": "^6.3",
         "phpunit/phpunit": "^10",
         "phpstan/phpstan": "^1.10",
-        "vimeo/psalm": "^5.8",
-        "friendsofphp/php-cs-fixer": "^3.15",
-        "ext-xdebug": "*"
+        "vimeo/psalm": "^5.14",
+        "friendsofphp/php-cs-fixer": "^3.22"
     },
     "license": "MIT",
     "autoload": {
