@@ -6,12 +6,23 @@ The modern PHP library for converting arrays into objects and vice-versa.
 
 `composer require blacktrs/data-transformer`
 
-## Configuration
+## Summary
 
 By default, the library will try to resolve `public` properties and match the with array fields. 
 The transformer is trying to find an object property with equal name as array field. 
 In case, if object missing such fields, the transformer converts array keys into camel case.
 However, it is possible to configure needed properties with attributes.
+
+
+### Features
+* Seamless converting of objects into arrays and vice-versa
+* The library respects declared property type
+* The library will respect private properties unless they will be declared explicitly as writable by the attribute 
+* The library takes into account getters or methods with the same name as a property
+* Enum conversion
+* Stringable objects conversion
+* Configurable custom property value resolvers
+* Configurable custom object transformers
 
 ## Attributes
 
@@ -38,18 +49,22 @@ The following parameters can be specified:
 ### Convert the array into the object
 
 ```php
+use Blacktrs\DataTransformer\Attribute\DataField;
+use Blacktrs\DataTransformer\Value\DateTimeValueResolver;
+use Blacktrs\DataTransformer\Transformer\Transformer;
+
 class RequestObject
 {
     public readonly int $id;
     public readonly string $email;
     public readonly string $name;
-    #[\Blacktrs\DataTransformer\Attribute\DataField(valueResolver: \Blacktrs\DataTransformer\Value\DateTimeValueResolver::class)]
+    #[DataField(valueResolver: DateTimeValueResolver::class)]
     public readonly \DateTime $date;
 }
 
 $requestPayload = ['id' => 1, 'email' => 'some.email@example.com', 'name' => 'John Doe', 'date' => '2023-06-01 10:10:10'];
 
-$transformer = new \Blacktrs\DataTransformer\Transformer\Transformer();
+$transformer = new Transformer();
 $requestObject = $transformer->transform(RequestObject::class, $requestPayload);
 
 echo $requestObject->id; // 1
@@ -77,8 +92,11 @@ $responseObject = new ResponseObject(
     name: 'John Doe'
 );
 
-$serializer = new \Blacktrs\DataTransformer\Serializer\ObjectSerializer();
+$serializer = new ObjectSerializer();
 $responseArray = $serializer->serialize($responseObject);
 
 echo $responseArray['id']; // 1
 ```
+
+### More examples
+More examples could be found in `tests`

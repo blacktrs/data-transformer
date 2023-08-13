@@ -11,8 +11,10 @@ use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithEnumProperty,
     FakeObjectWithFieldResolverAndArguments,
     FakeObjectWithGetters,
     FakeObjectWithOtherItem,
+    FakeObjectWithStringableProperty,
     FakeSimpleObject,
-    FakeSimpleObjectWithConstructor};
+    FakeSimpleObjectWithConstructor,
+    FakeStringableObject};
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
@@ -97,5 +99,17 @@ class ObjectSerializerTest extends TestCase
 
         self::assertSame($fakeObject->color, FakeColorEnum::from($result['color']));
         self::assertSame($fakeObject->size->name, $result['size']);
+    }
+
+    public function testStringableSerialize(): void
+    {
+        $fakeObject = new FakeObjectWithStringableProperty();
+        $fakeObject->id = 1;
+        $fakeObject->label = 'Object with stringable property';
+        $fakeObject->data = new FakeStringableObject(12345678);
+        $result = $this->serializer->serialize($fakeObject);
+
+        self::assertArrayHasKey('data', $result);
+        self::assertSame('String value: 12345678', $result['data']);
     }
 }

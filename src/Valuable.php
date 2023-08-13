@@ -41,6 +41,10 @@ trait Valuable
         }
 
         if (is_object($value)) {
+            if (is_callable([$value, '__toString'])) {
+                return (string) $value;
+            }
+
             return $originSerializer ? $originSerializer->serialize($value) : $this->serialize($value);
         }
 
