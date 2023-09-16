@@ -12,6 +12,8 @@ class FakeSimpleObject
 
     public string $label;
 
+    public ?string $context;
+
     #[DataField(ignoreTransform: true)]
     public string $description;
 

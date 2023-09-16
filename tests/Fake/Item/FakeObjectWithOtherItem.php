@@ -9,7 +9,6 @@ use Blacktrs\DataTransformer\Transformer\Transformer;
 
 class FakeObjectWithOtherItem
 {
-    #[DataField]
     public string $objectId;
 
     #[DataField(nameIn: 'fake_simple_object', objectTransformer: new Transformer())]

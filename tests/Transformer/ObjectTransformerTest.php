@@ -27,7 +27,7 @@ class ObjectTransformerTest extends TestCase
 
     public function testSimpleTransformation(): void
     {
-        $data = ['id' => 2, 'label' => 'Test Label', 'description' => 'some text'];
+        $data = ['id' => 2, 'label' => 'Test Label', 'description' => 'some text', 'context' => null];
 
         /** @var FakeSimpleObject $fakeObject */
         $fakeObject = $this->transformer->transform(FakeSimpleObject::class, $data);
@@ -35,6 +35,7 @@ class ObjectTransformerTest extends TestCase
         self::assertSame($data['id'], $fakeObject->id);
         self::assertSame($data['label'], $fakeObject->label);
         self::assertNotSame($data['description'], $fakeObject->description);
+        self::assertNull($fakeObject->context);
     }
 
     public function testCustomFieldNameDeclaration(): void

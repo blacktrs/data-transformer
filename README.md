@@ -25,9 +25,12 @@ However, it is possible to configure needed properties with attributes.
 * Configurable custom property value resolvers
 * Configurable custom object transformers
 
-## Attributes
+## Configuration
 
-### `DataField`
+Default transformer implementation `\Blacktrs\DataTransformer\Transformer\Transformer`
+allows to force private properties write by using method `setIncludePrivateProperties` or constructor parameter `$includePrivateProperties`
+
+### Attribute `DataField`
 This attribute is applicable to properties. By this attribute you can configure the behavior for each property you need
 
 The following parameters can be specified:
@@ -39,7 +42,7 @@ The following parameters can be specified:
 * `bool $ignoreTransform` Skip property while transforming an array into the object
 * `bool $ignoreSerialize` Skip property while serializing an object into array
 
-### `DataObject`
+### Attribute `DataObject`
 This attribute is applicable to classes and allows to use custom object serializer while converting object into other form
 
 The following parameters can be specified:
