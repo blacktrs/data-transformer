@@ -8,7 +8,7 @@ use Attribute;
 use Blacktrs\DataTransformer\Transformer\{TransformerInterface};
 use Blacktrs\DataTransformer\Value\ValueResolverInterface;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 readonly class DataField
 {
     public function __construct(

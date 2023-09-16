@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Transformer;
 
-use Blacktrs\DataTransformer\Tests\Fake\Item\{
+use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithConstructorAndGetters,
     FakeObjectWithEnumProperty,
     FakeObjectWithFieldNameDeclaration,
     FakeObjectWithFieldResolver,
     FakeObjectWithOtherItem,
     FakeObjectWithPrivateProperties,
-    FakeSimpleObject
-};
+    FakeSimpleObject,
+    FakeSimpleObjectWithConstructor};
 use Blacktrs\DataTransformer\Transformer\Transformer;
 use PHPUnit\Framework\TestCase;
 use DateTime;
@@ -99,5 +99,40 @@ class ObjectTransformerTest extends TestCase
 
         self::assertSame($fakeObject->color->value, $data['color']);
         self::assertSame($fakeObject->size->name, $data['size']);
+    }
+
+    public function testObjectWithPromotedProperties(): void
+    {
+        $data = ['id' => 1000, 'label' => 'Constructor promotion'];
+
+        /** @var FakeSimpleObjectWithConstructor $fakeObject */
+        $fakeObject = $this->transformer->transform(FakeSimpleObjectWithConstructor::class, $data);
+
+        static::assertSame($data['id'], $fakeObject->id);
+        static::assertSame($data['label'], $fakeObject->label);
+    }
+
+    public function testForcedPrivatePropertiesWrite(): void
+    {
+        $data = ['name' => 'John Doe', 'age' => 42];
+
+        /** @var FakeObjectWithPrivateProperties $fakeObject */
+        $fakeObject = $this->transformer
+            ->setIncludePrivateProperties(true)
+            ->transform(FakeObjectWithPrivateProperties::class, $data);
+
+        static::assertSame($data['name'], $fakeObject->getName());
+        static::assertSame($data['age'], $fakeObject->getAge());
+    }
+
+    public function testInstantiatedObjectFill(): void
+    {
+        $data = ['city' => 'Lviv', 'postcode' => 79000];
+        $fakeObject = new FakeObjectWithConstructorAndGetters('John Doe', 42);
+
+        $fakeObjectCopy = $this->transformer->setIncludePrivateProperties(true)->transform($fakeObject, $data);
+
+        static::assertSame($data['city'], $fakeObjectCopy->getCity());
+        static::assertSame($data['postcode'], $fakeObjectCopy->getPostcode());
     }
 }

@@ -1,7 +1,7 @@
 {
     "name": "blacktrs/data-transformer",
     "type": "library",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "require": {
         "php": ">=8.2"
     },
@@ -9,8 +9,8 @@
         "symfony/var-dumper": "^6.3",
         "phpunit/phpunit": "^10",
         "phpstan/phpstan": "^1.10",
-        "vimeo/psalm": "^5.14",
-        "friendsofphp/php-cs-fixer": "^3.22"
+        "vimeo/psalm": "^5.15",
+        "friendsofphp/php-cs-fixer": "^3.26"
     },
     "license": "MIT",
     "autoload": {
