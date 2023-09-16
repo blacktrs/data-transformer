@@ -47,6 +47,7 @@ class ObjectSerializerTest extends TestCase
         $fakeObject->simpleObject = new FakeSimpleObject();
         $fakeObject->simpleObject->id = 123;
         $fakeObject->simpleObject->label = 'my label';
+        $fakeObject->simpleObject->context = null;
 
         $result = $this->serializer->serialize($fakeObject);
 
@@ -54,6 +55,7 @@ class ObjectSerializerTest extends TestCase
         self::assertArrayHasKey('simpleObject', $result);
         self::assertArrayHasKey('id', $result['simpleObject']);
         self::assertArrayHasKey('label', $result['simpleObject']);
+        self::assertArrayHasKey('context', $result['simpleObject']);
     }
 
     public function testValueResolverSerialize(): void

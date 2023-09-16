@@ -129,6 +129,10 @@ class Transformer implements TransformerInterface
         $value = $this->data[$name];
 
         if ($property->hasType() && $reflectionType instanceof ReflectionNamedType) {
+            if ($value === null && $reflectionType->allowsNull()) {
+                return null;
+            }
+
             if ($reflectionType->isBuiltin()) {
                 settype($value, $reflectionType->getName());
 
