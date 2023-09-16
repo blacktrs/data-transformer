@@ -28,7 +28,7 @@ class ArraySerializer implements ObjectSerializerInterface
 
         $serialized = [];
         foreach ($properties as $property) {
-            $field = $this->getFieldAttribute($property);
+            $field = $this->getPropertyAttribute($property);
 
             if ($field->ignoreSerialize) {
                 continue;

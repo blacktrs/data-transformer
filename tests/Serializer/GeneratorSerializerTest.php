@@ -13,7 +13,7 @@ class GeneratorSerializerTest extends TestCase
 {
     public function testGeneratorSerialize(): void
     {
-        $generatorSerializer= new GeneratorSerializer();
+        $generatorSerializer = new GeneratorSerializer();
         $data = [
             new FakeSimpleObjectWithConstructor(123, 'First label'),
             new FakeSimpleObjectWithConstructor(1000, 'Second label')
