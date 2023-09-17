@@ -35,6 +35,7 @@
         "test": [
             "@putenv PHP_CS_FIXER_IGNORE_ENV=true",
             "php-cs-fixer fix --dry-run",
+            "@putenv XDEBUG_MODE=coverage",
             "phpunit",
             "phpstan --xdebug",
             "psalm"

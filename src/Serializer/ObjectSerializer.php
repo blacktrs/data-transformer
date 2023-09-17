@@ -15,12 +15,25 @@ use function is_string;
  */
 class ObjectSerializer implements ObjectSerializerInterface
 {
+    public function __construct(private bool $includePrivateProperties = false)
+    {
+    }
+
     public function serialize(object $object, ObjectSerializerInterface|string|null $originSerializer = null): mixed
     {
         $reflection = new ReflectionClass($object);
         $objectItem = $this->getTransformerObject($reflection);
 
-        return $this->getObjectSerializer($objectItem, $originSerializer)->serialize($object, $this);
+        return $this->getObjectSerializer($objectItem, $originSerializer)
+            ->setIncludePrivateProperties($this->includePrivateProperties)
+            ->serialize($object, $this);
+    }
+
+    public function setIncludePrivateProperties(bool $includePrivateProperties): self
+    {
+        $this->includePrivateProperties = $includePrivateProperties;
+
+        return $this;
     }
 
     private function getObjectSerializer(

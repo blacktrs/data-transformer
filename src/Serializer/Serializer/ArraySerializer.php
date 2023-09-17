@@ -17,6 +17,8 @@ class ArraySerializer implements ObjectSerializerInterface
     use Fieldable;
     use Valuable;
 
+    private bool $includePrivateProperties = false;
+
     /**
      * @param ObjectSerializerInterface|class-string<ObjectSerializerInterface>|null $originSerializer
      * @return array<array-key, mixed>
@@ -30,7 +32,7 @@ class ArraySerializer implements ObjectSerializerInterface
         foreach ($properties as $property) {
             $field = $this->getPropertyAttribute($property);
 
-            if ($field->ignoreSerialize) {
+            if (!$this->includePrivateProperties && $field->ignoreSerialize) {
                 continue;
             }
 
@@ -39,6 +41,13 @@ class ArraySerializer implements ObjectSerializerInterface
         }
 
         return $serialized;
+    }
+
+    public function setIncludePrivateProperties(bool $includePrivateProperties): self
+    {
+        $this->includePrivateProperties = $includePrivateProperties;
+
+        return $this;
     }
 
     /**

@@ -9,10 +9,10 @@ use Blacktrs\DataTransformer\Attribute\DataField;
 class FakeSimpleObjectWithConstructor
 {
     public function __construct(
-        #[DataField]
         public readonly int $id,
-        #[DataField]
         public readonly string $label,
+        #[DataField(ignoreSerialize: true)]
+        public readonly bool $hidden = true
     ) {
     }
 }

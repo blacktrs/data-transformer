@@ -6,14 +6,17 @@ namespace Blacktrs\DataTransformer\Tests\Serializer;
 
 use Blacktrs\DataTransformer\Serializer\ObjectSerializer;
 use Blacktrs\DataTransformer\Tests\Fake\Enum\{FakeColorEnum, FakeSizeEnum};
-use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithEnumProperty,
+use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithConstructorAndGetters,
+    FakeObjectWithEnumProperty,
     FakeObjectWithFieldResolver,
     FakeObjectWithFieldResolverAndArguments,
     FakeObjectWithGetters,
     FakeObjectWithOtherItem,
+    FakeObjectWithPrivateProperties,
     FakeObjectWithStringableProperty,
     FakeSimpleObject,
     FakeSimpleObjectWithConstructor,
+    FakeSimpleObjectWithForcedSerializer,
     FakeStringableObject};
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -38,6 +41,7 @@ class ObjectSerializerTest extends TestCase
         self::assertIsInt($result['id']);
         self::assertArrayHasKey('label', $result);
         self::assertIsString($result['label']);
+        self::assertArrayNotHasKey('hidden', $result);
     }
 
     public function testNestedObjectSerialize(): void
@@ -113,5 +117,38 @@ class ObjectSerializerTest extends TestCase
 
         self::assertArrayHasKey('data', $result);
         self::assertSame('String value: 12345678', $result['data']);
+    }
+
+    public function testForcePrivatePropertySerialize(): void
+    {
+        $fakeObject = new FakeObjectWithConstructorAndGetters('John Doe', 42);
+        $fakeObject->setCity('Lviv');
+        $fakeObject->setPostcode(79000);
+
+        $result = $this->serializer->setIncludePrivateProperties(true)->serialize($fakeObject);
+
+        static::assertArrayHasKey('name', $result);
+        static::assertSame($fakeObject->getName(), $result['name']);
+
+        static::assertArrayHasKey('age', $result);
+        static::assertSame($fakeObject->getAge(), $result['age']);
+
+        static::assertArrayHasKey('city', $result);
+        static::assertSame($fakeObject->getCity(), $result['city']);
+
+        static::assertArrayHasKey('postcode', $result);
+        static::assertSame($fakeObject->getPostcode(), $result['postcode']);
+    }
+
+    public function testForcedJsonSerializer(): void
+    {
+        $fakeObject = new FakeSimpleObjectWithForcedSerializer();
+        $fakeObject->id = 10;
+        $fakeObject->label = 'Json';
+        $fakeObject->context = 'test';
+
+        $result = $this->serializer->serialize($fakeObject);
+
+        static::assertJson($result);
     }
 }

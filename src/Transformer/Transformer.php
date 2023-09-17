@@ -17,6 +17,10 @@ use UnitEnum;
 
 use ReflectionParameter;
 
+use ReflectionException;
+
+use ReflectionType;
+
 use function array_key_exists;
 use function class_exists;
 use function is_string;
@@ -58,23 +62,10 @@ class Transformer implements TransformerInterface
             return $object;
         }
 
-        $args = [];
-        foreach ($parameters as $parameter) {
-            $field = $this->getParameterAttribute($parameter);
-            $name = $field->nameIn ?? $parameter->getName();
-
-            if (array_key_exists($name, $this->data)) {
-                $args[$name] = $this->getValue($field, $parameter, $name);
-            }
-        }
-
-        $object = $reflection->newInstanceWithoutConstructor();
-        $reflection->getConstructor()?->invokeArgs($object, $args);
-
-        return $object;
+        return $this->handleConstructorParameters($parameters, $reflection);
     }
 
-    public function setIncludePrivateProperties(bool $includePrivateProperties): Transformer
+    public function setIncludePrivateProperties(bool $includePrivateProperties): self
     {
         $this->includePrivateProperties = $includePrivateProperties;
 
@@ -126,37 +117,7 @@ class Transformer implements TransformerInterface
             return $this->getValueFromObjectResolver($field, $reflectionType, $name);
         }
 
-        $value = $this->data[$name];
-
-        if ($property->hasType() && $reflectionType instanceof ReflectionNamedType) {
-            if ($value === null && $reflectionType->allowsNull()) {
-                return null;
-            }
-
-            if ($reflectionType->isBuiltin()) {
-                settype($value, $reflectionType->getName());
-
-                return $value;
-            }
-
-            if (enum_exists($reflectionType->getName())) {
-                /** @var class-string<UnitEnum>|class-string<BackedEnum> $enum */
-                $enum = $reflectionType->getName();
-                if (is_subclass_of($enum, BackedEnum::class)) {
-                    return $enum::tryFrom($value);
-                }
-
-                $cases = array_values(array_filter($enum::cases(), fn (UnitEnum $unitEnum) => $unitEnum->name === $value));
-
-                return $cases[0] ?? throw new TransformerException(sprintf('No enum case found for %s in %s', $value, $enum));
-            }
-
-            if (class_exists($reflectionType->getName())) {
-                return (new self())->transform($reflectionType->getName(), $value);
-            }
-        }
-
-        return $value;
+        return $this->getTypedValue($property, $reflectionType, $this->data[$name]);
     }
 
     /**
@@ -202,10 +163,73 @@ class Transformer implements TransformerInterface
     ): mixed {
         /** @var TransformerInterface $objectTransformer */
         $objectTransformer = is_string($field->objectTransformer) ? new $field->objectTransformer() : $field->objectTransformer;
-
         /** @var class-string $objectClass */
         $objectClass = $this->getType($reflectionType);
 
         return $objectTransformer->transform($objectClass, $this->data[$name]);
+    }
+
+    /**
+     * @param array<ReflectionParameter> $parameters
+     * @param ReflectionClass<object> $reflection
+     * @throws ReflectionException
+     */
+    private function handleConstructorParameters(array $parameters, ReflectionClass $reflection): object
+    {
+        $args = [];
+        foreach ($parameters as $parameter) {
+            $field = $this->getParameterAttribute($parameter);
+            $name = $field->nameIn ?? $parameter->getName();
+
+            if (array_key_exists($name, $this->data)) {
+                $args[$name] = $this->getValue($field, $parameter, $name);
+            }
+        }
+
+        $object = $reflection->newInstanceWithoutConstructor();
+        $reflection->getConstructor()?->invokeArgs($object, $args);
+
+        return $object;
+    }
+
+    private function getTypedValue(
+        ReflectionParameter|ReflectionProperty $property,
+        ?ReflectionType $reflectionType,
+        mixed $value
+    ): mixed {
+        if ($property->hasType() && $reflectionType instanceof ReflectionNamedType) {
+            if ($value === null && $reflectionType->allowsNull()) {
+                return null;
+            }
+
+            if ($reflectionType->isBuiltin()) {
+                settype($value, $reflectionType->getName());
+
+                return $value;
+            }
+
+            if (enum_exists($reflectionType->getName())) {
+                return $this->getEnumValue($reflectionType, $value);
+            }
+
+            if (class_exists($reflectionType->getName())) {
+                return (new self())->transform($reflectionType->getName(), $value);
+            }
+        }
+
+        return $value;
+    }
+
+    private function getEnumValue(ReflectionNamedType $reflectionType, mixed $value): mixed
+    {
+        /** @var class-string<UnitEnum>|class-string<BackedEnum> $enum */
+        $enum = $reflectionType->getName();
+        if (is_subclass_of($enum, BackedEnum::class)) {
+            return $enum::tryFrom($value);
+        }
+
+        $cases = array_values(array_filter($enum::cases(), fn (UnitEnum $unitEnum) => $unitEnum->name === $value));
+
+        return $cases[0] ?? throw new TransformerException(sprintf('No enum case found for %s in %s', $value, $enum));
     }
 }

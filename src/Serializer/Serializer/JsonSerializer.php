@@ -14,6 +14,8 @@ class JsonSerializer implements ObjectSerializerInterface
     use Fieldable;
     use Valuable;
 
+    private bool $includePrivateProperties = false;
+
     /**
      * @param ObjectSerializerInterface|class-string<ObjectSerializerInterface>|null $originSerializer
      */
@@ -21,6 +23,18 @@ class JsonSerializer implements ObjectSerializerInterface
     {
         $arraySerializer = new ArraySerializer();
 
-        return json_encode($arraySerializer->serialize($object, $originSerializer));
+        return json_encode(
+            $arraySerializer
+                ->setIncludePrivateProperties($this->includePrivateProperties)
+                ->serialize($object, $originSerializer),
+            JSON_THROW_ON_ERROR
+        );
+    }
+
+    public function setIncludePrivateProperties(bool $includePrivateProperties): self
+    {
+        $this->includePrivateProperties = $includePrivateProperties;
+
+        return $this;
     }
 }

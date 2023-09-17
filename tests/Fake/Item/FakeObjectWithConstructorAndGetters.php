@@ -35,4 +35,14 @@ class FakeObjectWithConstructorAndGetters
     {
         return $this->postcode;
     }
+
+    public function setPostcode(int $postcode): void
+    {
+        $this->postcode = $postcode;
+    }
+
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
 }
