@@ -1,3 +1,5 @@
+![Coverage](https://raw.githubusercontent.com/blacktrs/data-transformer/image-data/coverage.svg)
+
 # Data transformer
 
 The modern PHP library for converting arrays into objects and vice-versa.
