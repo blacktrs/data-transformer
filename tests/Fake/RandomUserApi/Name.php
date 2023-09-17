@@ -6,14 +6,13 @@ namespace Blacktrs\DataTransformer\Tests\Fake\RandomUserApi;
 
 use Blacktrs\DataTransformer\Attribute\DataField;
 
-class Name
+readonly class Name
 {
-    #[DataField]
-    public readonly string $title;
+    public string $title;
 
     #[DataField(nameIn: 'first')]
-    public readonly string $firstName;
+    public string $firstName;
 
     #[DataField(nameIn: 'last')]
-    public readonly string $lastName;
+    public string $lastName;
 }

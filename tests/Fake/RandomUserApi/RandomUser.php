@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Fake\RandomUserApi;
 
-use Blacktrs\DataTransformer\Attribute\DataField;
-
-class RandomUser
+readonly class RandomUser
 {
-    #[DataField]
-    public readonly Name $name;
+    public Name $name;
+
+    public Location $location;
+
+    public string $email;
+
+    public string $phone;
 }

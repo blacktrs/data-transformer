@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Blacktrs\DataTransformer\Tests\Transformer;
 
+use Blacktrs\DataTransformer\Transformer\{Transformer, TransformerException};
 use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithConstructorAndGetters,
     FakeObjectWithEnumProperty,
     FakeObjectWithFieldNameDeclaration,
@@ -11,8 +12,8 @@ use Blacktrs\DataTransformer\Tests\Fake\Item\{FakeObjectWithConstructorAndGetter
     FakeObjectWithOtherItem,
     FakeObjectWithPrivateProperties,
     FakeSimpleObject,
-    FakeSimpleObjectWithConstructor};
-use Blacktrs\DataTransformer\Transformer\Transformer;
+    FakeSimpleObjectWithConstructor
+};
 use PHPUnit\Framework\TestCase;
 use DateTime;
 
@@ -27,7 +28,9 @@ class ObjectTransformerTest extends TestCase
 
     public function testSimpleTransformation(): void
     {
-        $data = ['id' => 2, 'label' => 'Test Label', 'description' => 'some text', 'context' => null];
+        $bytes = random_bytes(10);
+
+        $data = ['id' => 2, 'label' => 'Test Label', 'description' => 'some text', 'context' => null, 'unknownType' => $bytes];
 
         /** @var FakeSimpleObject $fakeObject */
         $fakeObject = $this->transformer->transform(FakeSimpleObject::class, $data);
@@ -36,6 +39,7 @@ class ObjectTransformerTest extends TestCase
         self::assertSame($data['label'], $fakeObject->label);
         self::assertNotSame($data['description'], $fakeObject->description);
         self::assertNull($fakeObject->context);
+        self::assertSame($bytes, $fakeObject->unknownType);
     }
 
     public function testCustomFieldNameDeclaration(): void
@@ -100,6 +104,14 @@ class ObjectTransformerTest extends TestCase
 
         self::assertSame($fakeObject->color->value, $data['color']);
         self::assertSame($fakeObject->size->name, $data['size']);
+    }
+
+    public function testUnknownEnumPropertyTransformation(): void
+    {
+        $data = ['id' => 1, 'name' => 'John Doe', 'color' => 'green', 'size' => 'XXL'];
+
+        $this->expectException(TransformerException::class);
+        $this->transformer->transform(FakeObjectWithEnumProperty::class, $data);
     }
 
     public function testObjectWithPromotedProperties(): void

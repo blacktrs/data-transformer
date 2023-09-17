@@ -7,10 +7,16 @@ namespace Blacktrs\DataTransformer\Tests\Transformer;
 use Blacktrs\DataTransformer\Tests\Fake\Item\FakeSimpleObject;
 use Blacktrs\DataTransformer\Transformer\GeneratorTransformer;
 use PHPUnit\Framework\TestCase;
-use Generator;
 
 class GeneratorTransformerTest extends TestCase
 {
+    private GeneratorTransformer $transformer;
+
+    protected function setUp(): void
+    {
+        $this->transformer = new GeneratorTransformer();
+    }
+
     public function testTransform(): void
     {
         $data = [
@@ -18,9 +24,8 @@ class GeneratorTransformerTest extends TestCase
             ['id' => 20000, 'label' => 'Second Label'],
         ];
 
-        $transformer = new GeneratorTransformer();
-        $collection = $transformer->transform(FakeSimpleObject::class, $data);
+        $collection = $this->transformer->transform(FakeSimpleObject::class, $data);
 
-        self::assertInstanceOf(Generator::class, $collection);
+        static::assertContainsOnlyInstancesOf(FakeSimpleObject::class, $collection);
     }
 }

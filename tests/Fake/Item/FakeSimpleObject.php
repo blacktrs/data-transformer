@@ -17,6 +17,8 @@ class FakeSimpleObject
     #[DataField(ignoreTransform: true)]
     public string $description;
 
+    public $unknownType = null;
+
     public function __construct()
     {
         $this->description = 'My fake description';

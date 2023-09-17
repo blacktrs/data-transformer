@@ -1,7 +1,6 @@
 {
     "name": "blacktrs/data-transformer",
     "type": "library",
-    "version": "1.1.1",
     "description": "Zero-dependency PHP array-to-object transformer",
     "require": {
         "php": ">=8.2"
@@ -35,6 +34,7 @@
         "test": [
             "@putenv PHP_CS_FIXER_IGNORE_ENV=true",
             "php-cs-fixer fix --dry-run",
+            "@putenv XDEBUG_MODE=coverage",
             "phpunit",
             "phpstan --xdebug",
             "psalm"
