@@ -1,4 +1,6 @@
-![Coverage](https://raw.githubusercontent.com/blacktrs/data-transformer/image-data/coverage.svg)
+![Scrutinizer coverage](https://img.shields.io/scrutinizer/coverage/g/blacktrs/data-transformer/main)&nbsp;
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/blacktrs/data-transformer/php.yaml)&nbsp;
+![Packagist Version](https://img.shields.io/packagist/v/blacktrs/data-transformer)
 
 # Data transformer
 
